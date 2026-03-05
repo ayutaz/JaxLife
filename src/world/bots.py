@@ -62,12 +62,12 @@ class Bot:
         grid_x, grid_y = (own_state.pos_x // self.config["CELL_SIZE"]).astype(jnp.int32), (
             own_state.pos_y // self.config["CELL_SIZE"]
         ).astype(jnp.int32)
-        terrain = jax.tree_map(lambda x: x[grid_x, grid_y], world_state.terrain)
-        world_state_diff_zero = jax.tree_map(lambda x: jnp.zeros_like(x), world_state)
+        terrain = jax.tree.map(lambda x: x[grid_x, grid_y], world_state.terrain)
+        world_state_diff_zero = jax.tree.map(lambda x: jnp.zeros_like(x), world_state)
 
-        agent_states_diff = jax.tree_map(lambda x: jnp.zeros_like(x), world_state.agent_states)
+        agent_states_diff = jax.tree.map(lambda x: jnp.zeros_like(x), world_state.agent_states)
 
-        bot_states_diff = jax.tree_map(lambda x: jnp.zeros_like(x), world_state.bot_states)
+        bot_states_diff = jax.tree.map(lambda x: jnp.zeros_like(x), world_state.bot_states)
 
         # DIFF SELF
         diff_bots_pos_x = bot_states_diff.pos_x.at[own_idx].add(self.config["MOVE_SPEED"] * action.x_move)
@@ -113,7 +113,7 @@ class Bot:
         diff_agents_energy = agent_states_diff.energy.at[infos["agent_idxs"]].add(-hit_benefit[:, 0])
         diff_bots_energy = diff_bots_energy.at[own_idx].add(hit_benefit.sum() * self.config["HIT_STEAL_FRACTION"])
 
-        terrain_diff = jax.tree_map(lambda x: jnp.zeros_like(x), world_state.terrain)
+        terrain_diff = jax.tree.map(lambda x: jnp.zeros_like(x), world_state.terrain)
 
         energy_gain_diff = terrain_diff.energy_gain.at[grid_x, grid_y].add(
             self.config["ACT_TERRAIN_ENERGY_GAIN"] * action.terrain_energy_gain
@@ -223,7 +223,7 @@ class Bot:
         agent_dists = jnp.linalg.norm(agent_diffs, axis=-1) + (1.0 - world_state.agent_states.alive) * 1000000.0
         agent_dists_idx_sorted = jnp.argsort(agent_dists, axis=-1)
         agent_dists_idx_sorted = agent_dists_idx_sorted[: self.config["BOT_NUM_VIEW_AGENTS"]]
-        visible_agents = jax.tree_map(lambda x: x[agent_dists_idx_sorted], world_state.agent_states)
+        visible_agents = jax.tree.map(lambda x: x[agent_dists_idx_sorted], world_state.agent_states)
         visible_agent_diffs = agent_diffs[agent_dists_idx_sorted]
         visible_agents = visible_agents.replace(pos_x=visible_agent_diffs[:, 0], pos_y=visible_agent_diffs[:, 1])
 
@@ -239,7 +239,7 @@ class Bot:
 
         bot_dists_idx_sorted = jnp.argsort(bot_dists, axis=-1)
         bot_dists_idx_sorted = bot_dists_idx_sorted[: self.config["BOT_NUM_VIEW_BOTS"]]
-        visible_bots = jax.tree_map(lambda x: x[bot_dists_idx_sorted], world_state.bot_states)
+        visible_bots = jax.tree.map(lambda x: x[bot_dists_idx_sorted], world_state.bot_states)
         visible_bot_diffs = bot_diffs[bot_dists_idx_sorted]
         visible_bots = visible_bots.replace(pos_x=visible_bot_diffs[:, 0], pos_y=visible_bot_diffs[:, 1])
 

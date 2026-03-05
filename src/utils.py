@@ -14,4 +14,4 @@ def tree_where(mask, tree_x, tree_y):
             mask = mask.reshape(new_shape)
         return jnp.where(mask, x, y)
 
-    return jax.tree_map(lambda x, y: apply_mask(x, y, mask), tree_x, tree_y)
+    return jax.tree.map(lambda x, y: apply_mask(x, y, mask), tree_x, tree_y)

@@ -135,14 +135,14 @@ class Visualizer:
         return img
 
     def render_frame_idx(self, world_states, i):
-        return self.render_frame(jax.tree_map(lambda x: x[i], world_states))
+        return self.render_frame(jax.tree.map(lambda x: x[i], world_states))
 
     def render(self, world_states, fname="out.mp4", show=True):
-        first_frame = jax.jit(self.render_frame)(jax.tree_map(lambda x: x[0], world_states))
+        first_frame = jax.jit(self.render_frame)(jax.tree.map(lambda x: x[0], world_states))
         with media.VideoWriter(fname, shape=first_frame.shape[:2], fps=self.config["FPS"], crf=18) as video:
             video.add_image(first_frame)
             for i in tqdm.trange(1, len(world_states.t)):
-                frame = self.render_frame(jax.tree_map(lambda x: x[i], world_states))
+                frame = self.render_frame(jax.tree.map(lambda x: x[i], world_states))
                 # frame = jax.jit(self.render_frame_idx)(world_states, i)
                 video.add_image(frame)
         if show:

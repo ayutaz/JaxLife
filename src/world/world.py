@@ -133,7 +133,7 @@ class World:
             jnp.arange(self.config["NUM_BOTS"]),
             world_state_no_params,
         )
-        world_state_no_params = jax.tree_map(lambda x, y: x.sum(0) + y, world_state_diff, world_state_no_params)
+        world_state_no_params = jax.tree.map(lambda x, y: x.sum(0) + y, world_state_diff, world_state_no_params)
 
         # Turn alive back into bool
         world_state_no_params = world_state_no_params.replace(
@@ -179,7 +179,7 @@ class World:
             jnp.arange(self.config["NUM_AGENTS"]),
             world_state_no_params,
         )
-        saliency = jax.tree_map(
+        saliency = jax.tree.map(
             lambda x: (x * world_state.agent_states.alive).sum() / jnp.sum(world_state.agent_states.alive), saliency
         )
         return saliency
@@ -199,7 +199,7 @@ class World:
                 jnp.arange(self.config["NUM_AGENTS"]),
                 world_state_no_params,
             )
-            world_state_no_params = jax.tree_map(lambda x, y: x.sum(0) + y, world_state_diff, world_state_no_params)
+            world_state_no_params = jax.tree.map(lambda x, y: x.sum(0) + y, world_state_diff, world_state_no_params)
 
             metrics["main/kardashev_agent"] = jnp.sum(energy_cost)
             metrics["main/kardashev_score"] += jnp.sum(energy_cost)
@@ -231,7 +231,7 @@ class World:
 
         # Sort by energy DESC
         idx_sorted = jnp.argsort(-agent_states.energy, axis=-1)
-        agent_states = jax.tree_map(lambda x: x[idx_sorted], agent_states)
+        agent_states = jax.tree.map(lambda x: x[idx_sorted], agent_states)
         print("*" * 10)
         print(f"reproduce_acts.shape: {reproduce_acts.shape}")
         reproduce_acts = reproduce_acts[idx_sorted]
@@ -257,7 +257,7 @@ class World:
         metrics["num_new_childs"] = num_new_childs
 
         # Sort by energy ASC
-        agent_states = jax.tree_map(lambda x: x[::-1], agent_states)
+        agent_states = jax.tree.map(lambda x: x[::-1], agent_states)
 
         agent_states = tree_where(
             jnp.logical_and(~agent_states.alive, jnp.arange(self.config["NUM_AGENTS"]) < num_new),

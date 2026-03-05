@@ -87,7 +87,7 @@ class Perlin:
             reproduce_cost=jax.random.uniform(rngs[5], self.noise_angles_shape) * self.config["WEATHER_CHANGE_SPEED"],
             max_energy=jax.random.uniform(rngs[6], self.noise_angles_shape) * self.config["WEATHER_CHANGE_SPEED"],
         )
-        new_noise_angles = jax.tree_map(lambda x, y: x + y, world_state.noise_angles, noise_angle_add)
+        new_noise_angles = jax.tree.map(lambda x, y: x + y, world_state.noise_angles, noise_angle_add)
 
         # Regenerate base state
         rng, _rng = jax.random.split(rng)

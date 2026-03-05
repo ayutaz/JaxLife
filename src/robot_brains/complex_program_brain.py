@@ -87,7 +87,7 @@ class RobotComplexProgramBrain:
         )
 
         self_message = action.self_message
-        action = jax.tree_map(lambda x: jnp.clip(x, -1, 1), action)  # clip actions.
+        action = jax.tree.map(lambda x: jnp.clip(x, -1, 1), action)  # clip actions.
         action = action.replace(self_message=self_message)  # Since self message is a delta we don't clip here
 
         return action
