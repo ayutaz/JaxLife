@@ -1,0 +1,18 @@
+[project]
+name = "jaxlife"
+version = "0.1.0"
+description = "JAXベースのオープンエンドな人工生命シミュレータ"
+requires-python = ">=3.10"
+dependencies = [
+    "flax>=0.10.7",
+    "jax>=0.6.2",
+    "mediapy>=1.2.6",
+    "pygame>=2.6.1",
+    "tqdm>=4.67.3",
+    "wandb>=0.25.0",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.5.1",
+]

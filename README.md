@@ -1,34 +1,34 @@
-# JaxLife - An Open-Ended Artificial Life Simulator in Jax
+# JaxLife - Jax によるオープンエンドな人工生命シミュレータ
 
-## 🧬 What is JaxLife
-JaxLife is an artificial life simulator that focuses on evolving complex and high-level behaviours. 
-This is done by having agents interact with robot systems that can perform Turing-complete computation.
+## 🧬 JaxLife とは
+JaxLife は、複雑で高度な行動の進化に焦点を当てた人工生命シミュレータです。
+エージェントが Turing-complete な計算を実行できるロボットシステムと相互作用することで、これを実現しています。
 
 
-### 💻 Simulation
-Our simulation consists of *agents*, *robots* and *terrain*. Agents evolve via natural selection, and are parametrised by a recurrent neural network. Robots can be programmed by agents, and are able to perform Turing-complete computation.
-Finally, the terrain controls many aspects of the simulation, such as how easy it is to move, how much energy there is available, etc. Terrain also changes slowly due to a weather and climate-like system.
+### 💻 シミュレーション
+本シミュレーションは、*エージェント*、*ロボット*、*地形* で構成されています。エージェントは自然選択によって進化し、リカレントニューラルネットワークによってパラメータ化されています。ロボットはエージェントによってプログラムでき、Turing-complete な計算を実行することが可能です。
+地形はシミュレーションの多くの側面（移動のしやすさ、利用可能なエネルギー量など）を制御します。また、天候や気候に似たシステムによって、地形はゆっくりと変化します。
 <p align="center">
     <img src="pics/fig1.png">
 </p>
 
-### 👾 Agents
-The agent's architecture uses separate encoders for all nearby entities. These are processes using self attention, and then cross attention with the agent's own embedding. The terrain is processed by a different encoder, and concatenated with the final entity representation. All of this is passed through an LSTM.
+### 👾 エージェント
+エージェントのアーキテクチャは、近くのすべてのエンティティに対して個別のエンコーダを使用します。これらは Self Attention で処理された後、エージェント自身の埋め込みとの Cross Attention が行われます。地形は別のエンコーダで処理され、最終的なエンティティ表現と結合されます。これらすべてが LSTM に通されます。
 
-Agents evolve via natural selection, and pass on their weights to their offspring, with small random perturbations acting as mutations.
-Agents can perform several actions, such as moving, eating, terraforming, attacking, and programming robots.
+エージェントは自然選択によって進化し、小さなランダムな摂動を突然変異として加えながら、自身の重みを子孫に引き継ぎます。
+エージェントは、移動、食事、地形変更、攻撃、ロボットのプログラミングなど、さまざまな行動を実行できます。
 <p align="center">
     <img src="pics/agents.png">
 </p>
 
-### 🤖 Robots
-Robots have the same action space as agents and can be programmed by sending a message to them. 
-These robots can theoretically perform Turing-complete computation.
+### 🤖 ロボット
+ロボットはエージェントと同じ行動空間を持ち、メッセージを送信することでプログラムできます。
+これらのロボットは、理論的に Turing-complete な計算を実行できます。
 <p align="center">
     <img src="pics/rule110.gif">
 </p>
 
-But they are also able to perform useful tasks, such as transportation, farming and communication.
+また、輸送、農業、通信などの実用的なタスクも実行できます。
 
 <p align="center">
     <img width="30%" src="pics/train.gif">
@@ -36,35 +36,35 @@ But they are also able to perform useful tasks, such as transportation, farming 
     <img width="30%" src="pics/terraform.gif">
 </p>
 
-## 📝 Results
-When we run the simulation, we can see some interesting emergent properties, such as the agents and robots performing mass terraforming and coordinating their actions.
+## 📝 結果
+シミュレーションを実行すると、エージェントとロボットが大規模な地形変更を行ったり、行動を協調させたりするなど、興味深い創発的特性を観察できます。
 <p align="center">
     <img src="pics/bridge.gif">
 </p>
 
-## ✍️ Usage
+## ✍️ 使い方
 
-### 🛠️ Installation
+### 🛠️ インストール
 
 ```bash
 git clone https://github.com/luchris429/JaxLife.git
 cd JaxLife
-pip install -r requirements.txt
-pre-commit install
+uv sync
+uv run pre-commit install
 ```
 
-### 🏃 Running
-You can run the following to start a simulation. There are many different configuration options, see the `src/main.py` for more details. 
-A few important parameters are:
-- `--gui`: Run interactively using Pygame
-- `--wandb`: Whether or not to log to Weights and Biases.
-- `--num-agents`: How many agents are in the simulation.
+### 🏃 実行方法
+以下のコマンドでシミュレーションを開始できます。さまざまな設定オプションがあります。詳細は `src/main.py` を参照してください。
+主要なパラメータは以下の通りです：
+- `--gui`: Pygame を使用してインタラクティブに実行
+- `--wandb`: Weights and Biases へのログ記録の有無
+- `--num-agents`: シミュレーション内のエージェント数
 ```bash
-python src/main.py
+uv run python src/main.py
 ```
 
 
-## 🔍 See Also
+## 🔍 関連プロジェクト
 
-- [Alien](https://github.com/chrxh/alien): A CUDA-powered Alife simulation.
-- [Leniax](https://github.com/morgangiraud/leniax): [Lenia](https://chakazul.github.io/lenia.html#Code) in Jax
+- [Alien](https://github.com/chrxh/alien): CUDA を活用した人工生命シミュレーション
+- [Leniax](https://github.com/morgangiraud/leniax): Jax による [Lenia](https://chakazul.github.io/lenia.html#Code) の実装

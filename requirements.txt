@@ -1,7 +1,0 @@
-jax
-wandb
-mediapy
-flax
-tqdm
-pygame
-pre-commit
